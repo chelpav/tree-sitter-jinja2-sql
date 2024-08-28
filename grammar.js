@@ -9,17 +9,25 @@ module.exports = grammar({
         choice(
           $._jinja_value,
           $.jinja_statement,
-          $._jinja_comment,
+          $.jinja_comment,
           $.html_content,
           $._text,
         ),
       ),
 
-    _jinja_value: ($) => seq("{{", $._expr, "}}"),
+    _jinja_value: ($) =>
+      seq(
+        field("open_delimiter", $.jinja_value_open),
+        $._expr,
+        field("close_delimiter", $.jinja_value_close),
+      ),
+
+    jinja_value_open: ($) => "{{",
+    jinja_value_close: ($) => "}}",
 
     jinja_statement: ($) =>
       seq(
-        "{%",
+        field("open_delimiter", $.jinja_statement_open),
         optional("-"),
         choice(
           $.jinja_for,
@@ -37,8 +45,11 @@ module.exports = grammar({
           $.jinja_end_statement,
         ),
         optional("-"),
-        "%}",
+        field("close_delimiter", $.jinja_statement_close),
       ),
+
+    jinja_statement_open: ($) => "{%",
+    jinja_statement_close: ($) => "%}",
 
     jinja_for: ($) =>
       seq(
@@ -109,8 +120,16 @@ module.exports = grammar({
     jinja_end_statement: ($) =>
       choice("endmacro", "endfor", "endif", "endblock", "endraw", "endcall"),
 
-    _jinja_comment: ($) =>
-      seq("{#", new RegExp("(" + "(" + "[^#]" + "|" + "#[^}]" + ")*" + ")#+}")),
+    jinja_comment: ($) =>
+      seq(
+        field("open_delimiter", $.jinja_comment_open),
+        field("content", $.jinja_comment_content),
+        field("close_delimiter", $.jinja_comment_close),
+      ),
+
+    jinja_comment_open: ($) => "{#",
+    jinja_comment_content: ($) => token(prec(1, /([^#]|#[^}])*/)),
+    jinja_comment_close: ($) => "#}",
 
     html_content: ($) =>
       seq(
@@ -127,7 +146,7 @@ module.exports = grammar({
                 $._text,
                 $._jinja_value,
                 $.jinja_statement,
-                $._jinja_comment,
+                $.jinja_comment,
               ),
             ),
             "</",
