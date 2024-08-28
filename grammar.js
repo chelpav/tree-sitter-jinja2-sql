@@ -60,7 +60,27 @@ module.exports = grammar({
         optional(field("if_clause", seq("if", $._expr))),
       ),
 
-    jinja_if: ($) => seq("if", field("condition", $._expr)),
+    jinja_if: ($) =>
+      seq(
+        "if",
+        field("condition", $._expr),
+        repeat(
+          seq(
+            field('else_if', $.jinja_elif)
+          )
+        ),
+        optional(
+          field('else', $.jinja_else)
+        )
+      ),
+
+    jinja_elif: ($) =>
+      seq(
+        "elif",
+        field("condition", $._expr)
+      ),
+
+    jinja_else: ($) => "else",
 
     jinja_include: ($) =>
       seq(
