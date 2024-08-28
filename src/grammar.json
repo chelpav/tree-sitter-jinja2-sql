@@ -139,6 +139,14 @@
             {
               "type": "SYMBOL",
               "name": "jinja_end_statement"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "jinja_elif"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "jinja_else"
             }
           ]
         },
@@ -214,7 +222,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "_expr"
+                    "name": "_condition"
                   }
                 ]
               }
@@ -238,10 +246,31 @@
           "name": "condition",
           "content": {
             "type": "SYMBOL",
-            "name": "_expr"
+            "name": "_condition"
           }
         }
       ]
+    },
+    "jinja_elif": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "elif"
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_condition"
+          }
+        }
+      ]
+    },
+    "jinja_else": {
+      "type": "STRING",
+      "value": "else"
     },
     "jinja_include": {
       "type": "SEQ",
@@ -1366,6 +1395,73 @@
           }
         ]
       }
+    },
+    "_condition": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_expr"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "comparison"
+        }
+      ]
+    },
+    "comparison": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "left",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expr"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "operator",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "=="
+              },
+              {
+                "type": "STRING",
+                "value": "!="
+              },
+              {
+                "type": "STRING",
+                "value": "<"
+              },
+              {
+                "type": "STRING",
+                "value": ">"
+              },
+              {
+                "type": "STRING",
+                "value": "<="
+              },
+              {
+                "type": "STRING",
+                "value": ">="
+              }
+            ]
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "right",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expr"
+          }
+        }
+      ]
     }
   },
   "extras": [
