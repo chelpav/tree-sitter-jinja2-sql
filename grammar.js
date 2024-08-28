@@ -43,6 +43,8 @@ module.exports = grammar({
           $.jinja_import,
           $.jinja_from,
           $.jinja_end_statement,
+          $.jinja_elif,
+          $.jinja_else,
         ),
         optional("-"),
         field("close_delimiter", $.jinja_statement_close),
@@ -57,28 +59,12 @@ module.exports = grammar({
         field("target", $._expr),
         "in",
         field("iterable", $._expr),
-        optional(field("if_clause", seq("if", $._expr))),
+        optional(field("if_clause", seq("if", $._condition))),
       ),
 
-    jinja_if: ($) =>
-      seq(
-        "if",
-        field("condition", $._expr),
-        repeat(
-          seq(
-            field('else_if', $.jinja_elif)
-          )
-        ),
-        optional(
-          field('else', $.jinja_else)
-        )
-      ),
+    jinja_if: ($) => seq("if", field("condition", $._condition)),
 
-    jinja_elif: ($) =>
-      seq(
-        "elif",
-        field("condition", $._expr)
-      ),
+    jinja_elif: ($) => seq("elif", field("condition", $._condition)),
 
     jinja_else: ($) => "else",
 
@@ -262,6 +248,15 @@ module.exports = grammar({
         ),
       );
     },
+
+    _condition: ($) => choice($._expr, $.comparison),
+
+    comparison: ($) =>
+      seq(
+        field("left", $._expr),
+        field("operator", choice("==", "!=", "<", ">", "<=", ">=")),
+        field("right", $._expr),
+      ),
   },
 });
 
