@@ -50,8 +50,12 @@
           "value": "{%"
         },
         {
-          "type": "PATTERN",
-          "value": "([^%]|%[^}])*%}"
+          "type": "SYMBOL",
+          "name": "_expr"
+        },
+        {
+          "type": "STRING",
+          "value": "%}"
         }
       ]
     },
@@ -63,8 +67,8 @@
           "value": "{#"
         },
         {
-          "type": "PATTERN",
-          "value": "(([^#]|#[^}])*)#+}"
+          "type": "STRING",
+          "value": "#}"
         }
       ]
     },
@@ -641,4 +645,3 @@
   "inline": [],
   "supertypes": []
 }
-
