@@ -52,6 +52,118 @@
     "fields": {}
   },
   {
+    "type": "comparison",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "dict",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "fn_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "lit_string",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "!=",
+            "named": false
+          },
+          {
+            "type": "<",
+            "named": false
+          },
+          {
+            "type": "<=",
+            "named": false
+          },
+          {
+            "type": "==",
+            "named": false
+          },
+          {
+            "type": ">",
+            "named": false
+          },
+          {
+            "type": ">=",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "dict",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "fn_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "lit_string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "dict",
     "named": true,
     "fields": {},
@@ -366,6 +478,54 @@
     }
   },
   {
+    "type": "jinja_elif",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "comparison",
+            "named": true
+          },
+          {
+            "type": "dict",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "fn_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "lit_string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "jinja_end_statement",
     "named": true,
     "fields": {}
@@ -412,6 +572,10 @@
         "types": [
           {
             "type": "bool",
+            "named": true
+          },
+          {
+            "type": "comparison",
             "named": true
           },
           {
@@ -572,6 +736,10 @@
         "types": [
           {
             "type": "bool",
+            "named": true
+          },
+          {
+            "type": "comparison",
             "named": true
           },
           {
@@ -773,6 +941,14 @@
         },
         {
           "type": "jinja_call",
+          "named": true
+        },
+        {
+          "type": "jinja_elif",
+          "named": true
+        },
+        {
+          "type": "jinja_else",
           "named": true
         },
         {
@@ -1055,6 +1231,10 @@
     }
   },
   {
+    "type": "!=",
+    "named": false
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -1095,11 +1275,23 @@
     "named": false
   },
   {
+    "type": "<=",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
   {
+    "type": "==",
+    "named": false
+  },
+  {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
     "named": false
   },
   {
@@ -1128,6 +1320,10 @@
   },
   {
     "type": "call",
+    "named": false
+  },
+  {
+    "type": "elif",
     "named": false
   },
   {
@@ -1208,6 +1404,10 @@
   },
   {
     "type": "jinja_comment_open",
+    "named": true
+  },
+  {
+    "type": "jinja_else",
     "named": true
   },
   {
