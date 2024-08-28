@@ -1,7 +1,10 @@
 module.exports = grammar({
   name: "jinja2",
 
-  conflicts: ($) => [[$._expr, $.fn_call]],
+  conflicts: ($) => [
+    [$._expr, $.fn_call],
+    [$.jinja_call, $._expr],
+  ],
 
   rules: {
     source_file: ($) =>
@@ -43,8 +46,6 @@ module.exports = grammar({
           $.jinja_import,
           $.jinja_from,
           $.jinja_end_statement,
-          $.jinja_elif,
-          $.jinja_else,
         ),
         optional("-"),
         field("close_delimiter", $.jinja_statement_close),
@@ -59,12 +60,18 @@ module.exports = grammar({
         field("target", $._expr),
         "in",
         field("iterable", $._expr),
-        optional(field("if_clause", seq("if", $._condition))),
+        optional(field("if_clause", seq("if", $._expr))),
       ),
 
-    jinja_if: ($) => seq("if", field("condition", $._condition)),
+    jinja_if: ($) =>
+      seq(
+        "if",
+        field("condition", $._expr),
+        repeat(field("elif", $.jinja_elif)),
+        optional(field("else", $.jinja_else)),
+      ),
 
-    jinja_elif: ($) => seq("elif", field("condition", $._condition)),
+    jinja_elif: ($) => seq("elif", field("condition", $._expr)),
 
     jinja_else: ($) => "else",
 
@@ -92,10 +99,13 @@ module.exports = grammar({
       ),
 
     jinja_call: ($) =>
-      seq(
-        "call",
-        optional(field("macro", $._expr)),
-        optional(field("params", $.argument_list)),
+      prec.right(
+        2,
+        seq(
+          "call",
+          optional(field("macro", $._expr)),
+          optional(field("params", $.argument_list)),
+        ),
       ),
 
     jinja_filter: ($) => seq("filter", field("filter_name", $.identifier)),
@@ -174,6 +184,9 @@ module.exports = grammar({
 
     _expr: ($) =>
       choice(
+        $.comparison,
+        $.binary_operation,
+        $.unary_operation,
         $.fn_call,
         $.list,
         $.dict,
@@ -182,15 +195,26 @@ module.exports = grammar({
         $.integer,
         $.float,
         $.identifier,
+        $.property_access,
+        $.subscript,
+      ),
+
+    property_access: ($) =>
+      prec.left(
+        2,
+        seq(field("object", $._expr), ".", field("property", $.identifier)),
+      ),
+
+    subscript: ($) =>
+      prec.left(
+        2,
+        seq(field("object", $._expr), "[", field("index", $._expr), "]"),
       ),
 
     fn_call: ($) =>
-      prec(
+      prec.left(
         1,
-        seq(
-          field("fn_name", $.identifier),
-          field("argument_list", $.argument_list),
-        ),
+        seq(field("fn_name", $._expr), field("argument_list", $.argument_list)),
       ),
 
     argument_list: ($) =>
@@ -210,7 +234,7 @@ module.exports = grammar({
 
     dict: ($) => seq("{", optional(commaSep1($.pair)), optional(","), "}"),
 
-    pair: ($) => seq(field("key", $.lit_string), ":", field("value", $._expr)),
+    pair: ($) => seq(field("key", $._expr), ":", field("value", $._expr)),
 
     identifier: ($) => $._identifier,
 
@@ -249,13 +273,36 @@ module.exports = grammar({
       );
     },
 
-    _condition: ($) => choice($._expr, $.comparison),
-
     comparison: ($) =>
-      seq(
-        field("left", $._expr),
-        field("operator", choice("==", "!=", "<", ">", "<=", ">=")),
-        field("right", $._expr),
+      prec.left(
+        1,
+        seq(
+          field("left", $._expr),
+          field(
+            "operator",
+            choice("==", "!=", "<", ">", "<=", ">=", "in", "not in"),
+          ),
+          field("right", $._expr),
+        ),
+      ),
+
+    binary_operation: ($) =>
+      prec.left(
+        1,
+        seq(
+          field("left", $._expr),
+          field("operator", choice("+", "-", "*", "/", "%", "//", "**")),
+          field("right", $._expr),
+        ),
+      ),
+
+    unary_operation: ($) =>
+      prec.right(
+        2,
+        seq(
+          field("operator", choice("not", "-", "+")),
+          field("operand", $._expr),
+        ),
       ),
   },
 });
