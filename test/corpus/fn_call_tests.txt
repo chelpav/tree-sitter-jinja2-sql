@@ -7,14 +7,21 @@ select * from {{ ref('my_table') }}
 ---
 
 (source_file
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_other)
+    (raw_ws)
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (lit_string)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 Ref with bare words fails
@@ -25,14 +32,21 @@ select * from {{ ref(not_a_string) }}
 ---
 
 (source_file
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_other)
+    (raw_ws)
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (identifier)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 Config with one kwarg
@@ -43,6 +57,7 @@ Config with one kwarg
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -51,7 +66,7 @@ Config with one kwarg
         (identifier)
         (lit_string))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 Config with two kwargs
@@ -62,6 +77,7 @@ Config with two kwargs
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -73,7 +89,7 @@ Config with two kwargs
         (identifier)
         (lit_string))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 Fn with a kwarg, string lit, list, and dict
@@ -89,6 +105,7 @@ Fn with a kwarg, string lit, list, and dict
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -105,7 +122,7 @@ Fn with a kwarg, string lit, list, and dict
         (lit_string)
         (lit_string))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 parses other fn names
@@ -116,12 +133,13 @@ parses other fn names
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 buried fn names
@@ -137,21 +155,37 @@ join {{ ref('y') }}
 ---
 
 (source_file
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_word)
+    (raw_other)
+    (raw_ws)
+    (raw_word)
+    (raw_other)
+    (raw_ws)
+    (raw_word)
+    (raw_ws)
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (lit_string)))
   (jinja_value_close)
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (lit_string)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 bool args
@@ -162,13 +196,14 @@ bool args
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (bool)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 bool kwargs
@@ -179,6 +214,7 @@ bool kwargs
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -187,7 +223,7 @@ bool kwargs
         (identifier)
         (bool))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 True is an invalid fn name
@@ -198,9 +234,10 @@ True is an invalid fn name
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (bool)
     (argument_list))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))

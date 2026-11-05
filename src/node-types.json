@@ -1745,6 +1745,33 @@
     }
   },
   {
+    "type": "raw_text",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "raw_brace",
+          "named": true
+        },
+        {
+          "type": "raw_other",
+          "named": true
+        },
+        {
+          "type": "raw_word",
+          "named": true
+        },
+        {
+          "type": "raw_ws",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -1832,6 +1859,10 @@
         },
         {
           "type": "raw_text",
+          "named": true
+        },
+        {
+          "type": "raw_ws",
           "named": true
         },
         {
@@ -2377,7 +2408,19 @@
     "named": false
   },
   {
-    "type": "raw_text",
+    "type": "raw_brace",
+    "named": true
+  },
+  {
+    "type": "raw_other",
+    "named": true
+  },
+  {
+    "type": "raw_word",
+    "named": true
+  },
+  {
+    "type": "raw_ws",
     "named": true
   },
   {

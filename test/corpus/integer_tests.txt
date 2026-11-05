@@ -7,10 +7,11 @@ zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 verbose zero
@@ -21,10 +22,11 @@ verbose zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 negative zero
@@ -35,10 +37,11 @@ negative zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 leading zeros
@@ -49,10 +52,11 @@ leading zeros
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 large number
@@ -63,10 +67,11 @@ large number
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 negative number
@@ -77,10 +82,11 @@ negative number
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 pandigital number
@@ -91,10 +97,11 @@ pandigital number
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 explicit positive
@@ -105,7 +112,8 @@ explicit positive
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (integer)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))

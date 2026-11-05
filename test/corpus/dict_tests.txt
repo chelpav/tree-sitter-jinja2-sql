@@ -7,6 +7,7 @@ floating dict
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (dict
     (pair
@@ -18,7 +19,7 @@ floating dict
         (lit_string)
         (lit_string))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 dict as arg
@@ -29,6 +30,7 @@ dict as arg
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -39,7 +41,7 @@ dict as arg
           (lit_string)
           (lit_string)))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 proper config call
@@ -50,6 +52,7 @@ proper config call
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -61,7 +64,7 @@ proper config call
             (lit_string)
             (lit_string))))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 dict spread over lines
@@ -75,6 +78,7 @@ dict spread over lines
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (dict
     (pair
@@ -84,7 +88,7 @@ dict spread over lines
       (lit_string)
       (list)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 dict with bools
@@ -95,6 +99,7 @@ dict with bools
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (dict
     (pair
@@ -104,4 +109,4 @@ dict with bools
       (lit_string)
       (bool)))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))

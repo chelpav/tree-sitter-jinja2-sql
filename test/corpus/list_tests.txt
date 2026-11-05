@@ -7,13 +7,14 @@ list of string lits
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (list
     (lit_string)
     (lit_string)
     (lit_string))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 empty list
@@ -24,10 +25,11 @@ empty list
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (list)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 list with trailing comma
@@ -38,13 +40,14 @@ list with trailing comma
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (list
     (lit_string)
     (lit_string)
     (lit_string))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 config with list of string lits
@@ -61,6 +64,7 @@ config with list of string lits
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (fn_call
     (identifier)
@@ -78,7 +82,7 @@ config with list of string lits
           (lit_string)
           (lit_string)))))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 deeply nested lists and dicts
@@ -89,7 +93,9 @@ deeply nested lists and dicts
 ---
 
 (source_file
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_other))
   (jinja_value_open)
   (list
     (dict
@@ -106,7 +112,9 @@ deeply nested lists and dicts
       (lit_string)
       (lit_string)))
   (jinja_value_close)
-  (raw_text))
+  (raw_text
+    (raw_other)
+    (raw_ws)))
 
 ==================
 list with booleans
@@ -117,10 +125,11 @@ list with booleans
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (list
     (bool)
     (bool)
     (lit_string))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))

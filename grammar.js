@@ -9,6 +9,7 @@ module.exports = grammar({
           $.jinja_statement,
           $.jinja_comment,
           $.raw_text,
+          $.raw_ws,
         ),
       ),
 
@@ -215,15 +216,25 @@ module.exports = grammar({
 
     // Raw template text (SQL in our case). Named (not hidden) so that
     // injections.scm can capture it and inject the SQL grammar.
+    // Split into word / whitespace / symbol tokens so highlights.scm can
+    // style SQL keywords as a fallback where the injected SQL grammar
+    // chokes on fragments (chunks starting with AND/WHERE/NOT after jinja tags).
     // '<' must be consumable: SQL operators like <=, <>, <=> are plain text.
     // A single '{' is text unless followed by '{', '%' or '#'.
+    // Starts with a non-whitespace token (pure gaps between tags are bare
+    // raw_ws at source level and do not trigger the SQL injection).
     raw_text: ($) =>
-      token(
-        prec(
-          -1,
-          new RegExp("(" + "[^<{]" + "|" + "[{][^{%#]" + "|" + "<" + ")+"),
+      prec.right(
+        seq(
+          choice($.raw_word, $.raw_other, $.raw_brace),
+          repeat(choice($.raw_word, $.raw_ws, $.raw_other, $.raw_brace)),
         ),
       ),
+
+    raw_word: ($) => token(prec(1, /[A-Za-z_][A-Za-z0-9_]*/)),
+    raw_ws: ($) => token(prec(1, /[ \t\r\n]+/)),
+    raw_brace: ($) => token(prec(1, /[{][^{%#]/)),
+    raw_other: ($) => token(prec(1, /[^A-Za-z_ \t\r\n{]+/)),
 
     integer: ($) => token(seq(optional(/[\+-]/), repeat1(/_?[0-9]+/))),
 

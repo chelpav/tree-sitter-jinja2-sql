@@ -22,6 +22,10 @@
           {
             "type": "SYMBOL",
             "name": "raw_text"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "raw_ws"
           }
         ]
       }
@@ -1330,13 +1334,96 @@
       ]
     },
     "raw_text": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "raw_word"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "raw_other"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "raw_brace"
+              }
+            ]
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "raw_word"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "raw_ws"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "raw_other"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "raw_brace"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "raw_word": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
-        "value": -1,
+        "value": 1,
         "content": {
           "type": "PATTERN",
-          "value": "([^<{]|[{][^{%#]|<)+"
+          "value": "[A-Za-z_][A-Za-z0-9_]*"
+        }
+      }
+    },
+    "raw_ws": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[ \\t\\r\\n]+"
+        }
+      }
+    },
+    "raw_brace": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[{][^{%#]"
+        }
+      }
+    },
+    "raw_other": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^A-Za-z_ \\t\\r\\n{]+"
         }
       }
     },

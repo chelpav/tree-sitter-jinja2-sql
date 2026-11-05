@@ -7,10 +7,11 @@ bare words fail
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (identifier)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 multiple jinja calls
@@ -21,17 +22,31 @@ some text {{ 'floating lit' }} more text {{ config() }} text.
 ---
 
 (source_file
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (lit_string)
   (jinja_value_close)
-  (raw_text)
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_word)
+    (raw_ws))
   (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list))
   (jinja_value_close)
-  (raw_text))
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_other)
+    (raw_ws)))
 
 ==================
 text with curlys works
@@ -42,7 +57,15 @@ some curlys { }
 ---
 
 (source_file
-  (raw_text))
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)
+    (raw_word)
+    (raw_ws)
+    (raw_brace)
+    (raw_other)
+    (raw_ws)))
 
 ==================
 doesn't hang on the empty string
@@ -55,7 +78,6 @@ doesn't hang on the empty string
 ==================
 unclosed jinja calls fail
 ==================
-
 {{ fn() 
 
 ---
