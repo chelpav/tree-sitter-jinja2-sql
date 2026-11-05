@@ -1,0 +1,21 @@
+{
+  "grammars": [
+    {
+      "name": "jinja2",
+      "camelcase": "Jinja2",
+      "scope": "source.jinja2",
+      "path": ".",
+      "file-types": [
+        "j2",
+        "jinja",
+        "sql.tmpl"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.2.0",
+    "license": "Apache-2.0",
+    "description": "Jinja2 grammar forked for SQL templates (db-tools *.sql.tmpl): raw text as named node, trim dashes, pipe filters, tuples",
+    "repository": "https://github.com/ArcherHume/tree-sitter-jinja2"
+  }
+}

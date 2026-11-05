@@ -9,9 +9,15 @@ only jinja syntax in top-level quotes is parsed
 ---
 
 (source_file
+  (raw_text)
+  (jinja_value_open)
   (lit_string)
+  (jinja_value_close)
+  (raw_text)
+  (jinja_value_open)
   (lit_string)
-)
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 python string escapes work
@@ -23,9 +29,13 @@ python string escapes work
 ---
 
 (source_file
+  (jinja_value_open)
   (lit_string)
+  (jinja_value_close)
+  (jinja_value_open)
   (lit_string)
-)
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 the kind of quotes you use don't matter
@@ -37,6 +47,10 @@ the kind of quotes you use don't matter
 ---
 
 (source_file
+  (jinja_value_open)
   (lit_string)
+  (jinja_value_close)
+  (jinja_value_open)
   (lit_string)
-)
+  (jinja_value_close)
+  (raw_text))
