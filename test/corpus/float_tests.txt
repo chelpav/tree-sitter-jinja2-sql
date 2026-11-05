@@ -7,10 +7,11 @@ common zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 trailing-point zero
@@ -21,10 +22,11 @@ trailing-point zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 leading-point zero
@@ -35,10 +37,11 @@ leading-point zero
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 pi
@@ -49,10 +52,11 @@ pi
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 exponent
@@ -63,10 +67,11 @@ exponent
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 negative exponent
@@ -77,10 +82,11 @@ negative exponent
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 negative
@@ -91,10 +97,11 @@ negative
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 negative leading point
@@ -105,10 +112,11 @@ negative leading point
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 exponent but no point
@@ -119,10 +127,11 @@ exponent but no point
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 explicit positives
@@ -133,7 +142,8 @@ explicit positives
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (float)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))

@@ -9,18 +9,21 @@ comments around jinja
 ---
 
 (source_file
+  (raw_ws)
   (jinja_comment
     (jinja_comment_open)
     (jinja_comment_content)
     (jinja_comment_close))
+  (raw_ws)
   (jinja_value_open)
   (bool)
   (jinja_value_close)
+  (raw_ws)
   (jinja_comment
     (jinja_comment_open)
     (jinja_comment_content)
     (jinja_comment_close))
-  (raw_text))
+  (raw_ws))
 
 ==================
 empty comment
@@ -33,14 +36,16 @@ empty comment
 ---
 
 (source_file
+  (raw_ws)
   (jinja_comment
     (jinja_comment_open)
     (jinja_comment_content)
     (jinja_comment_close))
+  (raw_ws)
   (jinja_value_open)
   (bool)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 wild comment formatting
@@ -55,17 +60,20 @@ wild comment formatting
 ---
 
 (source_file
+  (raw_ws)
   (jinja_value_open)
   (bool)
   (jinja_value_close)
+  (raw_ws)
   (jinja_comment
     (jinja_comment_open)
     (jinja_comment_content)
     (jinja_comment_close))
+  (raw_ws)
   (jinja_value_open)
   (bool)
   (jinja_value_close)
-  (raw_text))
+  (raw_ws))
 
 ==================
 wild comment formatting
@@ -76,19 +84,21 @@ wild comment formatting
 ---
 
 (source_file
+  (raw_ws)
   (jinja_comment
     (jinja_comment_open)
     (jinja_comment_content)
     (jinja_comment_close))
-  (raw_text))
+  (raw_ws))
 
 ==================
 text ending in a bracket (no trailing newline) errors
 ==================
-I'd like this to work, but it doesn't rn and this test
-makes a note of that {
+x {
 ---
 
 (source_file
-  (raw_text)
+  (raw_text
+    (raw_word)
+    (raw_ws))
   (ERROR))
