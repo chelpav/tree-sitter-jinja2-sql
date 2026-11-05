@@ -7,12 +7,13 @@ list of string lits
 ---
 
 (source_file
+  (jinja_value_open)
   (list
     (lit_string)
     (lit_string)
-    (lit_string)
-  )
-)
+    (lit_string))
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 empty list
@@ -23,8 +24,10 @@ empty list
 ---
 
 (source_file
+  (jinja_value_open)
   (list)
-)
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 list with trailing comma
@@ -35,12 +38,13 @@ list with trailing comma
 ---
 
 (source_file
+  (jinja_value_open)
   (list
     (lit_string)
     (lit_string)
-    (lit_string)
-  )
-)
+    (lit_string))
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 config with list of string lits
@@ -57,28 +61,24 @@ config with list of string lits
 ---
 
 (source_file
+  (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (kwarg
         (identifier)
-        (lit_string)
-      )
+        (lit_string))
       (kwarg
         (identifier)
-        (lit_string)
-      )
+        (lit_string))
       (kwarg
         (identifier)
         (list
           (lit_string)
           (lit_string)
-          (lit_string)
-        )
-      )
-    )
-  )
-)
+          (lit_string)))))
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 deeply nested lists and dicts
@@ -89,28 +89,24 @@ deeply nested lists and dicts
 ---
 
 (source_file
+  (raw_text)
+  (jinja_value_open)
   (list
     (dict
       (pair
         (lit_string)
         (list
           (lit_string)
-          (dict 
+          (dict
             (pair
               (lit_string)
-              (lit_string)
-            )
-          )
-        )
-      )
-    ) 
-    (list 
+              (lit_string))))))
+    (list
       (lit_string)
       (lit_string)
-      (lit_string)
-    )
-  )
-)
+      (lit_string)))
+  (jinja_value_close)
+  (raw_text))
 
 ==================
 list with booleans
@@ -121,9 +117,10 @@ list with booleans
 ---
 
 (source_file
+  (jinja_value_open)
   (list
     (bool)
     (bool)
-    (lit_string)
-  )
-)
+    (lit_string))
+  (jinja_value_close)
+  (raw_text))

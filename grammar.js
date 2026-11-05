@@ -1,11 +1,6 @@
 module.exports = grammar({
   name: "jinja2",
 
-  conflicts: ($) => [
-    [$._expr, $.fn_call],
-    [$.jinja_call, $._expr],
-  ],
-
   rules: {
     source_file: ($) =>
       repeat(
@@ -13,8 +8,7 @@ module.exports = grammar({
           $._jinja_value,
           $.jinja_statement,
           $.jinja_comment,
-          $.html_content,
-          $._text,
+          $.raw_text,
         ),
       ),
 
@@ -25,34 +19,34 @@ module.exports = grammar({
         field("close_delimiter", $.jinja_value_close),
       ),
 
-    jinja_value_open: ($) => "{{",
-    jinja_value_close: ($) => "}}",
+    jinja_value_open: ($) => token(seq("{{", optional("-"))),
+    jinja_value_close: ($) => token(seq(optional("-"), "}}")),
 
     jinja_statement: ($) =>
       seq(
         field("open_delimiter", $.jinja_statement_open),
-        optional("-"),
         choice(
           $.jinja_for,
           $.jinja_if,
+          $.jinja_elif,
+          $.jinja_else,
           $.jinja_include,
           $.jinja_extends,
           $.jinja_block,
           $.jinja_set,
           $.jinja_macro,
-          $.jinja_call,
           $.jinja_filter,
           $.jinja_raw,
           $.jinja_import,
           $.jinja_from,
+          $.fn_call,
           $.jinja_end_statement,
         ),
-        optional("-"),
         field("close_delimiter", $.jinja_statement_close),
       ),
 
-    jinja_statement_open: ($) => "{%",
-    jinja_statement_close: ($) => "%}",
+    jinja_statement_open: ($) => token(seq("{%", optional("-"))),
+    jinja_statement_close: ($) => token(seq(optional("-"), "%}")),
 
     jinja_for: ($) =>
       seq(
@@ -63,13 +57,7 @@ module.exports = grammar({
         optional(field("if_clause", seq("if", $._expr))),
       ),
 
-    jinja_if: ($) =>
-      seq(
-        "if",
-        field("condition", $._expr),
-        repeat(field("elif", $.jinja_elif)),
-        optional(field("else", $.jinja_else)),
-      ),
+    jinja_if: ($) => seq("if", field("condition", $._expr)),
 
     jinja_elif: ($) => seq("elif", field("condition", $._expr)),
 
@@ -96,16 +84,6 @@ module.exports = grammar({
         "macro",
         field("macro_name", $.identifier),
         field("params", $.argument_list),
-      ),
-
-    jinja_call: ($) =>
-      prec.right(
-        2,
-        seq(
-          "call",
-          optional(field("macro", $._expr)),
-          optional(field("params", $.argument_list)),
-        ),
       ),
 
     jinja_filter: ($) => seq("filter", field("filter_name", $.identifier)),
@@ -143,44 +121,9 @@ module.exports = grammar({
         field("close_delimiter", $.jinja_comment_close),
       ),
 
-    jinja_comment_open: ($) => "{#",
+    jinja_comment_open: ($) => token(seq("{#", optional("-"))),
     jinja_comment_content: ($) => token(prec(1, /([^#]|#[^}])*/)),
-    jinja_comment_close: ($) => "#}",
-
-    html_content: ($) =>
-      seq(
-        "<",
-        $.html_tag_name,
-        repeat($.html_attribute),
-        choice(
-          "/>",
-          seq(
-            ">",
-            repeat(
-              choice(
-                $.html_content,
-                $._text,
-                $._jinja_value,
-                $.jinja_statement,
-                $.jinja_comment,
-              ),
-            ),
-            "</",
-            $.html_tag_name,
-            ">",
-          ),
-        ),
-      ),
-
-    html_tag_name: ($) => /[a-zA-Z][a-zA-Z0-9-]*/,
-
-    html_attribute: ($) =>
-      seq(
-        $.html_attribute_name,
-        optional(seq("=", choice($.lit_string, $._jinja_value))),
-      ),
-
-    html_attribute_name: ($) => /[a-zA-Z][a-zA-Z0-9-]*/,
+    jinja_comment_close: ($) => token(seq(optional("-"), "#}")),
 
     _expr: ($) =>
       choice(
@@ -188,6 +131,8 @@ module.exports = grammar({
         $.binary_operation,
         $.unary_operation,
         $.fn_call,
+        $.filtered,
+        $.tuple,
         $.list,
         $.dict,
         $.lit_string,
@@ -197,6 +142,26 @@ module.exports = grammar({
         $.identifier,
         $.property_access,
         $.subscript,
+      ),
+
+    // Pipe filter: {{ value | filter | filter(args) }}
+    filtered: ($) =>
+      prec.left(
+        3,
+        seq(
+          field("value", $._expr),
+          "|",
+          field("filter", $.filter_spec),
+        ),
+      ),
+
+    filter_spec: ($) =>
+      prec.right(
+        2,
+        seq(
+          field("filter_name", $.identifier),
+          optional(field("arguments", $.argument_list)),
+        ),
       ),
 
     property_access: ($) =>
@@ -218,12 +183,18 @@ module.exports = grammar({
       ),
 
     argument_list: ($) =>
-      seq(
-        "(",
-        optional(commaSep1(choice($._expr, $.kwarg))),
-        optional(","),
-        ")",
+      prec(
+        1,
+        seq(
+          "(",
+          optional(commaSep1(choice($._expr, $.kwarg))),
+          optional(","),
+          ")",
+        ),
       ),
+
+    tuple: ($) =>
+      seq("(", optional(commaSep1($._expr)), optional(","), ")"),
 
     lit_string: ($) =>
       choice(seq("'", /([^']|\\')*/, "'"), seq('"', /([^"]|\\")*/, '"')),
@@ -242,8 +213,17 @@ module.exports = grammar({
 
     kwarg: ($) => seq(field("key", $.identifier), "=", field("value", $._expr)),
 
-    _text: ($) =>
-      token(prec(-1, new RegExp("(" + "[^<{]" + "|" + "[{][^{%#]" + ")+"))),
+    // Raw template text (SQL in our case). Named (not hidden) so that
+    // injections.scm can capture it and inject the SQL grammar.
+    // '<' must be consumable: SQL operators like <=, <>, <=> are plain text.
+    // A single '{' is text unless followed by '{', '%' or '#'.
+    raw_text: ($) =>
+      token(
+        prec(
+          -1,
+          new RegExp("(" + "[^<{]" + "|" + "[{][^{%#]" + "|" + "<" + ")+"),
+        ),
+      ),
 
     integer: ($) => token(seq(optional(/[\+-]/), repeat1(/_?[0-9]+/))),
 

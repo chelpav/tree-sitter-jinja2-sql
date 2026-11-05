@@ -1,25 +1,20 @@
 ==================
-parses a jinja expression
-==================
-
-select * from table
-{% if(True) call_function() %}
-select * from other_table
-
----
-
-(source_file (jinja_expression))
-
-==================
-ignores valid syntax in a jinja expression
+function statement (dbt-style)
 ==================
 
 {% ref('my_table') %}
 
 ---
 
-(source_file (jinja_expression))
-
+(source_file
+  (jinja_statement
+    (jinja_statement_open)
+    (fn_call
+      (identifier)
+      (argument_list
+        (lit_string)))
+    (jinja_statement_close))
+  (raw_text))
 
 ==================
 finds nested jinja expression
@@ -38,44 +33,38 @@ other as (
 ---
 
 (source_file
+  (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
       (kwarg
         (identifier)
-        (lit_string)
-      )
-    )
-  )
+        (lit_string))))
+  (jinja_value_close)
+  (raw_text)
+  (jinja_value_open)
   (fn_call
     (identifier)
     (argument_list
-      (lit_string)
-    )
-  )
-  (jinja_expression)
-)
+      (lit_string)))
+  (jinja_value_close)
+  (raw_text)
+  (jinja_statement
+    (jinja_statement_open)
+    (fn_call
+      (identifier)
+      (argument_list))
+    (jinja_statement_close))
+  (raw_text))
 
 ==================
-jinja expression recognized over multiple line breaks
-==================
-
-{%
-expression
-%}
-
----
-
-(source_file (jinja_expression))
-
-==================
-not a jinja expression
+not a jinja statement
 ==================
 
 {%}
 
 ---
 
-(source_file 
-  (ERROR)
-)
+(source_file
+  (ERROR
+    (jinja_statement_open)))
