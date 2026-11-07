@@ -23,8 +23,7 @@ ok
 (jinja_statement_close))
   (raw_ws)
   (raw_text
-    (raw_word)
-    (raw_ws)))
+    (raw_word)))
 
 ==================
 or with not
@@ -46,5 +45,4 @@ or with not
   (jinja_statement
 (jinja_statement_open)
     (jinja_end_statement)
-(jinja_statement_close))
-  (raw_ws))
+(jinja_statement_close)))
