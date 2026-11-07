@@ -1,0 +1,50 @@
+==================
+and in condition
+==================
+{%- if f.value_type == 'string' and f.operation == '=' -%}
+ok
+---
+
+(source_file
+  (jinja_statement
+(jinja_statement_open)
+    (jinja_if
+(boolean_operation
+(comparison
+(property_access
+(identifier)
+(identifier))
+(lit_string))
+(comparison
+(property_access
+(identifier)
+(identifier))
+(lit_string))))
+(jinja_statement_close))
+  (raw_ws)
+  (raw_text
+    (raw_word)
+    (raw_ws)))
+
+==================
+or with not
+==================
+{% if a or not b %}
+{% endif %}
+---
+
+(source_file
+  (jinja_statement
+(jinja_statement_open)
+    (jinja_if
+(boolean_operation
+(identifier)
+(unary_operation
+(identifier))))
+(jinja_statement_close))
+  (raw_ws)
+  (jinja_statement
+(jinja_statement_open)
+    (jinja_end_statement)
+(jinja_statement_close))
+  (raw_ws))

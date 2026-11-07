@@ -761,6 +761,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "boolean_operation"
+        },
+        {
+          "type": "SYMBOL",
           "name": "binary_operation"
         },
         {
@@ -816,6 +820,48 @@
           "name": "subscript"
         }
       ]
+    },
+    "boolean_operation": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "left",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_expr"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "and"
+                },
+                {
+                  "type": "STRING",
+                  "value": "or"
+                }
+              ]
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "right",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_expr"
+            }
+          }
+        ]
+      }
     },
     "filtered": {
       "type": "PREC_LEFT",

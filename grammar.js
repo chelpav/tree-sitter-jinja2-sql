@@ -129,6 +129,7 @@ module.exports = grammar({
     _expr: ($) =>
       choice(
         $.comparison,
+        $.boolean_operation,
         $.binary_operation,
         $.unary_operation,
         $.fn_call,
@@ -143,6 +144,18 @@ module.exports = grammar({
         $.identifier,
         $.property_access,
         $.subscript,
+      ),
+
+    // Логические операторы jinja2: {{ a == 'x' and b == 'y' }}
+    // Прецедент ниже сравнений (как в python): and/or связывают слабее ==/in
+    boolean_operation: ($) =>
+      prec.left(
+        0,
+        seq(
+          field("left", $._expr),
+          field("operator", choice("and", "or")),
+          field("right", $._expr),
+        ),
       ),
 
     // Pipe filter: {{ value | filter | filter(args) }}
